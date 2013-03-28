@@ -18,7 +18,7 @@ A quick and easy sparql request to understand how it works. You can find more ex
 
 - `prefixe($namespace, $url)` You can add several prefixes with this method
 - `distinct($boolean)` Set a request with a distinct select
-- `variable($var) Add a variable to select i.e. `?z`
+- `variable($var)` Add a variable to select i.e. `?z`
 - `where($subject, $predicate, $object)` add a where condition
 - `optionalWhere($subject, $predicate, $object)` add a conditional where condition
 - `union($sparql)` define where condition on a SPARQL object and give it to this method
