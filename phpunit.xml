@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<phpunit bootstrap="vendor/autoload.php" colors="true" strict="true">
+    <testsuites>
+        <testsuite name="phpDocumentor">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/Legrand</directory>
+        </whitelist>
+    </filter>
+</phpunit>

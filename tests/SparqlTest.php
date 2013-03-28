@@ -1,0 +1,131 @@
+<?php
+
+class SparqlTest extends PHPUnit_Framework_TestCase
+{
+    public function testBasicQuery()
+    {
+        $sparql = new Legrand\SPARQL;
+
+        $sparql->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?x', '?y');
+
+        $expected = "SELECT * WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y }";
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with juste one where');
+    }
+
+    public function testBasicQueryWithLimit()
+    {
+        $sparql = new Legrand\SPARQL;
+
+        $sparql->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?x', '?y')->limit(10);
+
+        $expected = "SELECT * WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y } LIMIT 10";
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with juste one where and a limit of 10');
+    }
+
+    public function testBasicQueryWithLimitAndOffset()
+    {
+        $sparql = new Legrand\SPARQL;
+
+        $sparql->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?x', '?y')->limit(10)->offset(10);
+
+        $expected = "SELECT * WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y } LIMIT 10 OFFSET 10";
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with juste one where and a limit of 10, offset of 10');
+    }
+
+    public function testBasicQueryWithVariable()
+    {
+        $sparql = new Legrand\SPARQL;
+
+        $sparql->variable('?y')->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?x', '?y');
+
+        $expected = "SELECT ?y WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y }";
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with juste one where and select a variable');
+    }
+
+    public function testBasicQueryWithVariableAndDistinct()
+    {
+        $sparql = new Legrand\SPARQL;
+
+        $sparql->distinct(true)->variable('?y')->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?x', '?y');
+
+        $expected = "SELECT DISTINCT ?y WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y }";
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with juste one where and select a distinct variable');
+    }
+
+    public function testBasicQueryWithVariables()
+    {
+        $sparql = new Legrand\SPARQL;
+
+        $sparql->variable('?x')->variable('?y')->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?x', '?y');
+
+        $expected = "SELECT ?x, ?y WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y }";
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with juste one where and select two variables');
+    }
+
+    public function testBasicQueryWithFilter()
+    {
+        $sparql = new Legrand\SPARQL;
+
+        $sparql->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?x', '?y')->filter('?x = rdfs:comment');
+
+        $expected = "SELECT * WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y . FILTER (?x = rdfs:comment) }";
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with a filter');
+    }
+
+    public function testComplexQueryWithUnion()
+    {
+        $sparql = new Legrand\SPARQL;
+        $sparql2 = new Legrand\SPARQL;
+
+        $sparql2->where('?uri', 'rdf:label', '?label')->filter('lang(?label) = "en" && regex(?label, "Nine Inch Nails")');
+
+        $sparql->variable('?uri')->where('?uri', 'rdf:label', '?label')->filter('lang(?label) = "en" && regex(?label, "Metallica")')->union($sparql2);
+
+        $expected = 'SELECT ?uri WHERE { { ?uri rdf:label ?label . FILTER (lang(?label) = "en" && regex(?label, "Metallica")) }UNION { ?uri rdf:label ?label . FILTER (lang(?label) = "en" && regex(?label, "Nine Inch Nails")) } }';
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with a filter');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private function cleanQuery($query)
+    {
+        return trim(str_replace("\n", " ", $query));
+    }
+}
