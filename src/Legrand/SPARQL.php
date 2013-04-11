@@ -1,5 +1,17 @@
 <?php
 
+//
+// Copyright (c) 2013 Damien Legrand
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+// to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+// and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+
 namespace Legrand;
 
 /**
@@ -84,7 +96,7 @@ class SPARQL {
 	}
 	public function optionalWhere($x, $y, $z)
 	{ 
-		$this->wheres[] = "OPTIONAL {".$x." ".$y." ".$z."}"; 
+		$this->wheres[] = "OPTIONAL { $x $y $z }"; 
 		return $this; 
 	}
 	public function optionalWhereComplexe($obj)
@@ -118,7 +130,7 @@ class SPARQL {
 		return $this; 
 	}
 	
-	public function launch($debug=false) 
+	public function launch($debug=false)
 	{
 		if($this->sparql == "") $this->sparql = $this->build();
 		
@@ -170,7 +182,7 @@ class SPARQL {
 		//PREFIXES
 		foreach($this->prefixes as $pre)
 		{
-			$sp .= $pre + "\n";
+			$sp .= $pre + " ";
 		}
 
 		//VARIABLES
@@ -195,9 +207,9 @@ class SPARQL {
 		elseif($this->insertGraph == null && $this->deleteGraph == null) $sp .= "*";
 
 		//WHERES 
-		if($this->insertGraph == null) $sp .= "\nWHERE";
+		if($this->insertGraph == null) $sp .= " WHERE";
 
-		if(count($this->unions) > 0) $sp .= "\n{";
+		if(count($this->unions) > 0) $sp .= " {";
 
 		$w = $this->buildWhere();
 
@@ -222,7 +234,7 @@ class SPARQL {
 			}
 		}
 
-		if(count($this->unions) > 0) $sp .= "\n}\n";
+		if(count($this->unions) > 0) $sp .= " } ";
 
 		//ORDER BY
 		if(count($this->orders) > 0)
@@ -240,10 +252,10 @@ class SPARQL {
 		}
 
 		//LIMIT
-		if($this->limitNb != null) $sp .= "\nLIMIT " . $this->limitNb;
+		if($this->limitNb != null) $sp .= " LIMIT " . $this->limitNb;
 
 		//OFFSET
-		if($this->offsetNb != null) $sp .= "\nOFFSET " . $this->offsetNb;
+		if($this->offsetNb != null) $sp .= " OFFSET " . $this->offsetNb;
 
 		return $sp;
 	}
@@ -253,7 +265,7 @@ class SPARQL {
 		$sp = "";
 		if(count($this->wheres) == 0) return $sp;
 
-		$sp .= "\n{\n";
+		$sp .= " { ";
 		
 		$i = 0;
 		foreach($this->wheres as $w)
@@ -261,12 +273,17 @@ class SPARQL {
 			$sp .= $w;
 			if($i < count($this->wheres) - 1) $sp .= " .";
 
-			$sp .= "\n";
+			$sp .= " ";
 			$i++;
 		}
 
-		$sp .= "}\n";
+		$sp .= "}"; //maybe put again the line return after the bracket
 
 		return $sp;
+	}
+
+	public function getQuery()
+	{
+		return $this->build();
 	}
 }

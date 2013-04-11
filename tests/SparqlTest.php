@@ -93,6 +93,19 @@ class SparqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, 'The simple query with a filter');
     }
 
+    public function testBasicQueryWithMultipleWhere()
+    {
+        $sparql = new Legrand\SPARQL;
+
+        $sparql->variable('?label')->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '<http://dbpedia.org/ontology/associatedBand>', '?y')->where('?y', 'rdfs:label', '?label');
+
+        $expected = "SELECT ?label WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> <http://dbpedia.org/ontology/associatedBand> ?y . ?y rdfs:label ?label }";
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with a filter');
+    }
+
     public function testComplexQueryWithUnion()
     {
         $sparql = new Legrand\SPARQL;
