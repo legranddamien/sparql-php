@@ -49,6 +49,7 @@ class SPARQL {
 	public $orders			= array();
 	public $limitNb			= null;
 	public $offsetNb		= null;
+	public $selectGraph		= null;
 	public $insertGraph		= null;
 	public $deleteGraph		= null;
 	public $deleteCond		= null;
@@ -68,6 +69,12 @@ class SPARQL {
 	public function distinct($bool)
 	{ 
 		$this->distinctSelect = $bool; 
+		return $this;
+	}
+
+	public function select($graph)
+	{ 
+		$this->selectGraph = $graph;
 		return $this;
 	}
 
@@ -208,6 +215,7 @@ class SPARQL {
 
 		//WHERES 
 		if($this->insertGraph == null) $sp .= " WHERE";
+		if($this->selectGraph != null) $sp .= " { GRAPH <" . $this->selectGraph . ">";
 
 		if(count($this->unions) > 0) $sp .= " {";
 
@@ -235,6 +243,7 @@ class SPARQL {
 		}
 
 		if(count($this->unions) > 0) $sp .= " } ";
+		if($this->selectGraph != null) $sp .= " } ";
 
 		//ORDER BY
 		if(count($this->orders) > 0)

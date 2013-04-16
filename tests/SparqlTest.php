@@ -134,6 +134,18 @@ class SparqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, 'The simple query with a filter');
     }
 
+    public function testSelectInGraph()
+    {
+        $sparql = new Legrand\SPARQL;
+        $sparql->select('http://graph')->where('<http://element/id>', '?x', '?y');
+
+        $expected = 'SELECT * WHERE { GRAPH <http://graph> { <http://element/id> ?x ?y } }';
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with a filter');
+    }
+
 
 
 
