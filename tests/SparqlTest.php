@@ -122,6 +122,18 @@ class SparqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, 'The simple query with a filter');
     }
 
+    public function testDelete()
+    {
+        $sparql = new Legrand\SPARQL;
+        $sparql->delete('http://graph', '<http://element/id> ?x ?y');
+
+        $expected = 'WITH <http://graph> DELETE { <http://element/id> ?x ?y }';
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with a filter');
+    }
+
 
 
 
