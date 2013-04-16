@@ -187,7 +187,7 @@ class SPARQL {
 
 		//VARIABLES
 		if($this->insertGraph != null) $sp .= "INSERT IN GRAPH <" . $this->insertGraph . "> ";
-		elseif($this->deleteGraph != null) return "WITH <" . $this->deleteGraph . "> DELETE { " . $this->deleteCond . " } ";
+		elseif($this->deleteGraph != null) $sp .= "DELETE FROM <" . $this->deleteGraph . "> { " . $this->deleteCond . " }";
 		else $sp .= "SELECT ";
 
 		if($this->distinctSelect) $sp .= "DISTINCT ";

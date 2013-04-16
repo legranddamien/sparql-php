@@ -125,9 +125,9 @@ class SparqlTest extends PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $sparql = new Legrand\SPARQL;
-        $sparql->delete('http://graph', '<http://element/id> ?x ?y');
+        $sparql->delete('http://graph', '<http://element/id> ?x ?y')->where('<http://element/id>', '?x', '?y');
 
-        $expected = 'WITH <http://graph> DELETE { <http://element/id> ?x ?y }';
+        $expected = 'DELETE FROM <http://graph> { <http://element/id> ?x ?y } WHERE { <http://element/id> ?x ?y }';
 
         $actual = $this->cleanQuery($sparql->getQuery());
 
