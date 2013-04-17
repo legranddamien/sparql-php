@@ -206,7 +206,7 @@ class SPARQL {
 			foreach($this->variables as $v)
 			{
 				if($first) $first = false;
-				else if($i < count($this->variables)) $sp .= ", ";
+				else if($i < count($this->variables)) $sp .= " ";
 				$sp .= $v;
 				$i++;
 			}
@@ -254,7 +254,7 @@ class SPARQL {
 			foreach($this->orders as $o)
 			{
 				if($first) $first = false;
-				else if($i < count($this->orders)) $sp .= ", ";
+				else if($i < count($this->orders)) $sp .= " ";
 				$sp .= $o;
 				$i++;
 			}

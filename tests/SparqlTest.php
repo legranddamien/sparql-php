@@ -73,7 +73,7 @@ class SparqlTest extends PHPUnit_Framework_TestCase
 
         $sparql->variable('?x')->variable('?y')->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?x', '?y');
 
-        $expected = "SELECT ?x, ?y WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y }";
+        $expected = "SELECT ?x ?y WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y }";
 
         $actual = $this->cleanQuery($sparql->getQuery());
 
