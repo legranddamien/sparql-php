@@ -49,6 +49,7 @@ class SPARQL {
 	public $orders			= array();
 	public $limitNb			= null;
 	public $offsetNb		= null;
+	public $groupByItems		= array();
 	public $selectGraph		= null;
 	public $insertGraph		= null;
 	public $deleteGraph		= null;
@@ -119,6 +120,11 @@ class SPARQL {
 	public function filter($x)
 	{ 
 		$this->wheres[] = "FILTER ($x)"; 
+		return $this; 
+	}
+	public function groupBy($x)
+	{ 
+		$this->groupByItems[] = $x;
 		return $this; 
 	}
 	public function orderBy($x)
@@ -244,6 +250,21 @@ class SPARQL {
 
 		if(count($this->unions) > 0) $sp .= " } ";
 		if($this->selectGraph != null) $sp .= " } ";
+
+		//GROUP BY
+		if(count($this->groupByItems) > 0)
+		{
+			$sp .= 'GROUP BY ';
+			$first = true;
+			$i = 0;
+			foreach($this->groupByItems as $o)
+			{
+				if($first) $first = false;
+				else if($i < count($this->groupByItems)) $sp .= " ";
+				$sp .= $o;
+				$i++;
+			}
+		}
 
 		//ORDER BY
 		if(count($this->orders) > 0)
