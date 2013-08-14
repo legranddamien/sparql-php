@@ -269,7 +269,7 @@ class SPARQL {
 		//ORDER BY
 		if(count($this->orders) > 0)
 		{
-			$sp .= 'ORDER BY ';
+			$sp .= ' ORDER BY ';
 			$first = true;
 			$i = 0;
 			foreach($this->orders as $o)
