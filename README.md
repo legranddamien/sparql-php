@@ -8,7 +8,7 @@ A quick and easy sparql request to understand how it works. You can find more ex
 
         $sparql = new Legrand\SPARQL;
 
-        $sparql->varaible('?z')
+        $sparql->variable('?z')
                ->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?y', '?z')
                ->limit(20);
 
