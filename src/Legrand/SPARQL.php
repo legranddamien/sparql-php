@@ -203,7 +203,11 @@ class SPARQL {
 		else return $result;
 	}
 	
-	
+	public function getSPARQL()
+	{
+		return $this->build();
+	}
+
 	private function build() 
 	{
 		$sp = "";
