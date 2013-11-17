@@ -28,8 +28,9 @@ A quick and easy sparql request to understand how it works. You can find more ex
 - `orderBy($order)` define the order i.e. `?z DESC`
 - `limit($nb)` define the limit 
 - `offset($nb)` define the offset
-- `insert($graph) create an insert sparql query by giving the graph uri
-- `delete($graph) create a delete sparql query by giving the graph uri
+- `insert($graph)` create an insert sparql query by giving the graph uri
+- `delete($graph)` create a delete sparql query by giving the graph uri
+- `getSPARQL()` get the SPARQL query without calling the endpoint
 
 ## Defaults
 Some attributes are set with defaults value. You can of course change these values :
