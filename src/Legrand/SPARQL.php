@@ -33,7 +33,7 @@ class SPARQL {
 	public $queryParam 		= "query";
 
 	//The GET or POST parameter name for the result's format
-	public $formatParam 		= "format";
+	public $formatParam 	= "format";
 
 	//GET or POST
 	public $method 			= "GET";
@@ -43,13 +43,14 @@ class SPARQL {
 
 	//Arrays to build the request
 	public $prefixes 		= array();
-	public $distinctSelect 		= false;
+	public $distinctSelect 	= false;
 	public $variables 		= array();
+	public $froms 			= array();
 	public $wheres 			= array();
 	public $orders			= array();
 	public $limitNb			= null;
 	public $offsetNb		= null;
-	public $groupByItems		= array();
+	public $groupByItems	= array();
 	public $selectGraph		= null;
 	public $insertGraph		= null;
 	public $deleteGraph		= null;
@@ -97,46 +98,61 @@ class SPARQL {
 		$this->variables[] = $x; 
 		return $this;
 	}
+
+	public function from($graph)
+	{ 
+		$this->froms[] = "FROM <$graph>"; 
+		return $this; 
+	}
+
 	public function where($x, $y, $z)
 	{ 
 		$this->wheres[] = "$x $y $z"; 
 		return $this; 
 	}
+
 	public function optionalWhere($x, $y, $z)
 	{ 
 		$this->wheres[] = "OPTIONAL { $x $y $z }"; 
 		return $this; 
 	}
+
 	public function optionalWhereComplexe($obj)
 	{ 
 		$this->wheres[] = "OPTIONAL ".$obj->buildWhere();
 		return $this; 
 	}
+
 	public function union($x)
 	{ 
 		$this->unions[] = $x; 
 		return $this; 
 	}
+
 	public function filter($x)
 	{ 
 		$this->wheres[] = "FILTER ($x)"; 
 		return $this; 
 	}
+
 	public function groupBy($x)
 	{ 
 		$this->groupByItems[] = $x;
 		return $this; 
 	}
+
 	public function orderBy($x)
 	{ 
 		$this->orders[] = $x;
 		return $this; 
 	}
+
 	public function limit($x)
 	{ 
 		$this->limitNb = $x; 
 		return $this; 
 	}
+
 	public function offset($x)
 	{ 
 		$this->offsetNb = $x; 
@@ -218,6 +234,15 @@ class SPARQL {
 			}
 		}
 		elseif($this->insertGraph == null && $this->deleteGraph == null) $sp .= "*";
+
+		//FROM
+		if(count($this->froms) > 0)
+		{
+			foreach ($this->froms as $from) 
+			{
+				$sp .= " $from";
+			}
+		}
 
 		//WHERES 
 		if($this->insertGraph == null) $sp .= " WHERE";

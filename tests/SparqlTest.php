@@ -28,6 +28,19 @@ class SparqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, 'The simple query with juste one where and a limit of 10');
     }
 
+    public function testBasicQueryWithFroms()
+    {
+        $sparql = new Legrand\SPARQL;
+
+        $sparql->from('http://graph1')->from('http://graph2')->where('<http://dbpedia.org/resource/Nine_Inch_Nails>', '?x', '?y');
+
+        $expected = "SELECT * FROM <http://graph1> FROM <http://graph2> WHERE { <http://dbpedia.org/resource/Nine_Inch_Nails> ?x ?y }";
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with two from');
+    }
+
     public function testBasicQueryWithLimitAndOffset()
     {
         $sparql = new Legrand\SPARQL;
