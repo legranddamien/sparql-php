@@ -215,7 +215,7 @@ class SPARQL {
 		//PREFIXES
 		foreach($this->prefixes as $pre)
 		{
-			$sp .= $pre + " ";
+			$sp .= $pre . " ";
 		}
 
 		//VARIABLES
