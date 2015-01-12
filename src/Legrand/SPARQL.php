@@ -65,7 +65,7 @@ class SPARQL {
 
 	public function prefixe($ns, $x)
 	{ 
-		$this->prefixes[] = "PREFIX $ns : <$x>"; 
+		$this->prefixes[] = "PREFIX $ns: <$x>\n"; 
 		return $this; 
 	}
 	public function distinct($bool)
