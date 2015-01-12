@@ -171,6 +171,18 @@ class SparqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, 'The simple query with a filter');
     }
 
+    public function testPrefixes()
+    {
+        $sparql = new Legrand\SPARQL;
+        $sparql->prefixe('foaf', 'http://xmlns.com/foaf/0.1/')->select('http://graph')->where('<http://element/id>', '?x', '?y')->groupBy('?x');
+
+        $expected = 'PREFIX foaf: <http://xmlns.com/foaf/0.1/>  SELECT * WHERE { GRAPH <http://graph> { <http://element/id> ?x ?y } } GROUP BY ?x';
+
+        $actual = $this->cleanQuery($sparql->getQuery());
+
+        $this->assertEquals($expected, $actual, 'The simple query with prefixes');
+    }
+
 
 
 
